@@ -1,15 +1,28 @@
 #map {
-    height: 50%;
-    width: 85%;
-    position: sticky;
-    top: 0;
+    height: 100%;
+    margin: 0;
+    padding: 0px;
+    width: 100%;
     
   }
+
+  #wrapper {
+    height: 50%;
+    width: 100%;
+    position: sticky;
+    top: 0;
+  }
+
+  #card {
+    
+    margin: 0 auto;
+    
+  }
+ 
   /* Optional: Makes the sample page fill the window. */
   html, body {
     height: 100%;
-    margin: 0;
-    padding: 0;
+    
   }
   
   .controls {
@@ -62,14 +75,18 @@
     font-family: 'Oswald', sans-serif;
    }
 
+   #for {
+     color: gold;
+   }
+
    h6 {
      font-family: 'Fugaz One', cursive
    }
    
    .navbar {
-   background-color: brown;
-   width: 100%;
-   border-bottom: 3px solid gold;
+    background: #157EFB;
+    width: 100%;
+    border-bottom: 3px solid gold;
    }
 
    body{
@@ -105,7 +122,10 @@
      width: 25%;
      float: left;
      padding: 10px;
+     margin: 0 auto;
    }
+
+  
 
    .card-text {
      font-size: 8pt;
@@ -115,22 +135,23 @@
    .btn, .btn-primary {
      width: 100%;
      color: #fff;
+     text-align: left;
    }
    
    .number-circle {
     border-radius: 50%;
     behavior: url(PIE.htc);
     /* remove if you don't care about IE8 */
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     padding-left: 8px;
     padding-right: 8px;
-    padding-top: 16px;
+    padding-top: 14px;
     padding-bottom: 0px;
     background: #157EFB;
     color: #fff;
     text-align: center;
-    font: 16px Arial, sans-serif;
+    font: 14px Arial, sans-serif;
   }
 #routebtn {
   border-radius: 12px;
@@ -150,4 +171,144 @@
 
 .cardin {
   display: inline;
+}
+
+/* ------ MEDIA QUERIES ----- */
+@media only screen and (max-width: 420px) {
+  .card {
+    display: inline;
+    width: 100%;
+    float: left;
+    padding: 10px;
+  }
+
+  h6 {
+    font-size: 14px;
+  }
+
+  h5 {
+    font-size: 16px;
+  }
+
+
+
+  .card-text {
+    font-size: 8pt;
+    word-wrap: 
+  }
+
+  .btn, .btn-primary {
+    width: 100%;
+    color: #fff;
+    text-align: left;
+    font-size: 14px;
+  }
+  
+  .number-circle {
+   border-radius: 50%;
+   behavior: url(PIE.htc);
+   /* remove if you don't care about IE8 */
+   width: 28px;
+   height: 28px;
+   padding-left: 5px;
+   padding-right: 5px;
+   padding-top: 8px;
+   padding-bottom: 0px;
+   background: #157EFB;
+   color: #fff;
+   text-align: center;
+   font: 8px Arial, sans-serif;
+ }
+
+} 
+
+
+
+
+
+@media only screen and (max-width: 960px) {
+  .card {
+    display: inline;
+    width: 33%;
+    float: left;
+    padding: 10px;
+  }
+
+  h6 {
+    font-size: 14px;
+  }
+
+  h5 {
+    font-size: 16px;
+  }
+
+
+
+  .card-text {
+    font-size: 8pt;
+    word-wrap: 
+  }
+
+  .btn, .btn-primary {
+    width: 100%;
+    color: #fff;
+    text-align: left;
+    font-size: 14px;
+  }
+  
+  .number-circle {
+   border-radius: 50%;
+   behavior: url(PIE.htc);
+   /* remove if you don't care about IE8 */
+   width: 28px;
+   height: 28px;
+   padding-left: 5px;
+   padding-right: 5px;
+   padding-top: 8px;
+   padding-bottom: 0px;
+   background: #157EFB;
+   color: #fff;
+   text-align: center;
+   font: 8px Arial, sans-serif;
+ }
+
+} 
+
+
+
+
+@media only screen and (max-width: 1240px) {
+  .card {
+    display: inline;
+    width: 33%;
+    float: left;
+    padding: 10px;
+  }
+
+  .card-text {
+    font-size: 8pt;
+    word-wrap: 
+  }
+
+  .btn, .btn-primary {
+    width: 100%;
+    color: #fff;
+    text-align: left;
+  }
+  
+  .number-circle {
+   border-radius: 50%;
+   behavior: url(PIE.htc);
+   /* remove if you don't care about IE8 */
+   width: 34px;
+   height: 34px;
+   padding-left: 6px;
+   padding-right: 6px;
+   padding-top: 10px;
+   padding-bottom: 0px;
+   background: #157EFB;
+   color: #fff;
+   text-align: center;
+   font: 10px Arial, sans-serif;
+ }
 }

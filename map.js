@@ -28,6 +28,9 @@ var nameReverse = false;
 var styleReverse = false;
 var breweryReverse = false;
 var distanceReverse = false;
+var newData = data;
+var currentBrewery;
+console.log(newData)
 
 
 //=======================================================================================
@@ -53,7 +56,7 @@ function populateTable(arr){
     var brewery = arr[i].brewloc;
     
     var breweryData = ("<a class='btn btn-primary' style='color: #fff' latt='" + data[i].latt + "' brew-data='" + data[i].brewloc + "' >" + brewery + "</a>");
-    console.log(breweryData);
+   // console.log(breweryData);
     //breweryData.attr("data-latt", data[i].latt);
     //breweryData.attr("data-long", data[i].long);
     
@@ -85,28 +88,34 @@ function populateTable(arr){
     var drivingTimeHTML;
     for(var x = 0; x < coordsArr.length; x++) {
       if (brewery == breweryArr[x]){
+        console.log(drivingDistances.rows[0].elements[x]);
         if (drivingDistances.rows[0].elements[x].status =="OK"){
          ////console.log(drivingDistances.rows[0].elements[x].distance.value + "api pull");
         var drivingDistData =  Math.round((drivingDistances.rows[0].elements[x].distance.value)* mileConverter)
         var drivingTimeData = (drivingDistances.rows[0].elements[x].duration.text)
         drivingDistHTML =("<td>" + drivingDistData + "</td>");
-        drivingTimeHTML = ("<td>" + drivingTimeData + "</td>");
+        drivingTimeHTML = drivingTimeData
        ////console.log(drivingDistData + "drivingdistdata");
        ////console.log(drivingTimeData + "drivingdistdata");
+       arr[i].drivingDistance = drivingDistData
+      //console.log(data[i].drivingDistance);
       }
       else{
-        drivingTimeHTML = ("<td> no driving info</td>");
-        drivingDistHTML = ("<td> no driving info</td>");
+        drivingTimeHTML = ("no driving info");
+        arr[i].drivingDistance = 100000000;
+        drivingDistHTML = ("no driving info");
       }
     }
   }
-  var drive = ("<p class='card-text cardin'>" + drivingTimeData + "</p>");
+  var drive = ("<p class='card-text cardin'>" + drivingTimeHTML + "</p>");
+  console.log(drivingTimeHTML)
     // Append the td elements to the new table row*/
     $(blankcard).append(ranknumberdata, drive, beerNameData,styleData, breweryData);
     // Append the table row to the tbody element
     $("#cards").append(blankcard);
   }  
 }
+
 /*
  data.sort(function(a, b) {
           var textA = a.rank
@@ -159,13 +168,13 @@ documentReadyFunction()
 
 });
 function calculateDistance(){
-  document.getElementById("table-body2").innerHTML = "";
+  $("#cards").empty();
 var queryURL4 = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + latt + "," + long + "&destinations=enc:" + encoded+ ":&key=" + mykey;
 $.ajax({
   url: queryURL4,
   method: "GET"
 }).done(function (response) {
-//console.log(response);
+  console.log(response + "teste");
 drivingDistances = response;
 //console.log("distanceresponse");
 //console.log(drivingDistances)
@@ -175,13 +184,13 @@ populateTable(data);
 //var queryURL3 = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + latt + "," + long + "&destinations=enc:" + encoded+ ":&key="+ mykey;
 
 function recaculateDistance(placeID){
-  document.getElementById("table-body2").innerHTML = "";
+  $("#cards").empty();
   var queryURL3 = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=place_id:"+placeID+ "&destinations=enc:" + encoded+ ":&key="+ mykey;
   $.ajax({
     url: queryURL3,
     method: "GET"
   }).done(function (response) {
-  //console.log(response);
+  console.log(response + "teste");
   drivingDistances = response;
   //console.log("distanceresponse2");
   //console.log(drivingDistances)
@@ -218,7 +227,7 @@ function calcRoute() {
       directionsDisplay.setDirections(response);
       directionsDisplay.setMap(map);
     } else {
-      alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+      //alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
     }
   });
 }
@@ -227,7 +236,7 @@ $(document).on("click", "#routebtn", function() {
   //console.log("stsuff")
 calcRoute();
 });
-
+var marker2;
 //==================================================================
 //Map Initialization Function
 function initMap() {
@@ -253,18 +262,19 @@ function initMap() {
   marker.addListener('click', function () {
     infowindow.open(map, marker);
   });
-
+   marker2 = marker
   google.maps.event.addListener(map, 'click', function(event) {
     infowindow.close();
     infowindow.setContent("your chosen location");
     marker.setPlace(null);
     latt = event.latLng.lat();
     long  = event.latLng.lng()
-    //console.log(latt, long)
+    
     marker.setPosition(new google.maps.LatLng(latt, long),)
    
     map.panTo(new google.maps.LatLng(latt, long),)
     calculateDistance()
+    console.log(latt, long)
     //alert( "Latitude: "+event.latLng.lat()+" "+", longitude: "+event.latLng.lng() ); 
     //console.log(event.latlng);
  });
@@ -274,7 +284,7 @@ function initMap() {
   //=======================================================================================
   //Create multiple markers on the map
   var markers, i;
-
+var currentBeers = []
   for (i = 0; i < data.length; i++) {
     markers = new google.maps.Marker({
       position: new google.maps.LatLng(data[i].latt, data[i].long),
@@ -288,12 +298,23 @@ function initMap() {
         lastBrewLat = markers.getPosition().lat();
         //console.log(markers.getPosition().lng());
         lastBrewLong = markers.getPosition().lng();
-        var b = data[i].brewloc;
-        var bsm = b.toLowerCase();
-        var n = data[i].name;
-        infowindow.setContent(bsm + "<br>" + "<h6>" + n + "</h6>");
-        
+        //var b = data[i].brewloc;
+        //var bsm = b.toLowerCase();
+        //var n = data[i].name;
+        //infowindow.setContent(bsm + "<br>" + "<h6>" + n + "</h6>");
+        currentBeers = []
+  for (i = 0; i < data.length; i++) {
+    if (lastBrewLat == data[i].latt){
+currentBrewery = data[i].brewloc
+currentBeers.push(data[i].name)
+    }
+  }
+        console.log(currentBeers)
+        console.log(data)
+        infowindow.setContent(currentBrewery + currentBeers);
         infowindow.open(map, markers);
+        marker2= markers
+        //infowindow.open(map, markers);
       }
     })(markers, i));
   }
@@ -358,6 +379,7 @@ var marker2;
 }
 
 $(document).on('click','.btn-primary', map, function() {
+ 
   //console.log($(this).attr("brew-data"));
     console.log("stuff")
    var brewlat = ($(this).attr("brew-lat"));
@@ -368,12 +390,14 @@ $(document).on('click','.btn-primary', map, function() {
    for (var i = 0; i < data.length; i++) {
      //console.log(data[i.brewloc])
      if(data[i].brewloc==($(this).attr("brew-data"))){
+       currentBrewery = $(this).attr("brew-data");
+       console.log(currentBrewery)
        //console.log("workingstuff")
        var latLng = new google.maps.LatLng(data[i].latt, data[i].long); //Makes a latlng
        map.panTo(new google.maps.LatLng(data[i].latt, data[i].long))
        lastBrewLat = data[i].latt,
        lastBrewLong = data[i].long;
-         infowindow.setContent(data[i].brewloc);
+         infowindow.setContent(currentBrewery);
          //infowindow.open(map, markers);
        
      }
@@ -477,7 +501,7 @@ function encodeNumber(num) {
   return encodeString;
 }
 
-$(document).on("click", "#name", function() {
+$(document).on("click", ".sort-btn", function() {
   $("#cards").empty();
   if ($(this).attr("id") == "name"){
   console.log("name")
@@ -568,17 +592,17 @@ $(document).on("click", "#name", function() {
           console.log("distance")
           if (distanceReverse == true){
             data.reverse(function(a, b) {
-              var textA = a.distance
+              var textA = a.drivingDistance
               console.log(textA)
-              var textB = b.distance
+              var textB = b.drivingDistance
               return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
           });
           distanceReverse = false;
           }
            else if (distanceReverse == false){
            data.sort(function(a, b) {
-              var textA = a.distance
-              var textB = b.distance
+              var textA = a.drivingDistance
+              var textB = b.drivingDistance
               return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
           });
           distanceReverse = true;
