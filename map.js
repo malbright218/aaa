@@ -23,6 +23,13 @@ var directionsService;
 var lastBrewLat;
 var lastBrewLong;
 var markerArr = [];
+var rankReverse = false;
+var nameReverse = false;
+var styleReverse = false;
+var breweryReverse = false;
+var distanceReverse = false;
+
+
 //=======================================================================================
 //Creates a table of the beer data
   
@@ -33,19 +40,22 @@ function populateTable(arr){
     var blankcard = $("<div></div>");
     blankcard.addClass("card");
    var ranknumber = arr[i].rank; 
-   console.log(ranknumber);
-   var ranknumberdata = $("<h5>" + ranknumber + "</h5>");     //append to the card
+   
+   var ranknumberdata = $("<h5 class='number-circle'>" + ranknumber + "</h5>");     //append to the card
   
     //++++++++++++++++++++++++++++++++++++++++++
     var beerName = arr[i].name;
-    console.log(beerName);
+    
     var beerNameData = ("<h6 class='card-title'>" + beerName + "</h6>");
     
     
     //++++++++++++++++++++++++++++++++++++++++++
     var brewery = arr[i].brewloc;
-    console.log(brewery);
-    var breweryData = ("<a class='btn btn-primary'>" + brewery + "</a>");
+    
+    var breweryData = ("<a class='btn btn-primary' style='color: #fff' latt='" + data[i].latt + "' brew-data='" + data[i].brewloc + "' >" + brewery + "</a>");
+    console.log(breweryData);
+    //breweryData.attr("data-latt", data[i].latt);
+    //breweryData.attr("data-long", data[i].long);
     
     
     //++++++++++++++++++++++++++++++++++++++++++
@@ -55,9 +65,7 @@ function populateTable(arr){
     
     //++++++++++++++++++++++++++++++++++++++++++
 
-    $(blankcard).append(ranknumberdata, beerNameData,styleData, breweryData);
-    // Append the table row to the tbody element
-    $("body").append(blankcard);
+    
     /*var lat1 = latt;
     var lon1 = long;
     var lat2 = arr[i].latt;
@@ -72,7 +80,7 @@ function populateTable(arr){
     var dist1 = 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
     var dist2 = dist1 * 0.621371
     var dist3 = dist2.toFixed(2)
-    //var distdata = ("<td>" + dist3 + "</td>")
+    var distdata = ("<td>" + dist3 + "</td>")*/
     var drivingDistHTML;
     var drivingTimeHTML;
     for(var x = 0; x < coordsArr.length; x++) {
@@ -92,9 +100,11 @@ function populateTable(arr){
       }
     }
   }
-  var drive = ("<td>" + drivingTimeData + "</td>");
+  var drive = ("<p class='card-text cardin'>" + drivingTimeData + "</p>");
     // Append the td elements to the new table row*/
-    
+    $(blankcard).append(ranknumberdata, drive, beerNameData,styleData, breweryData);
+    // Append the table row to the tbody element
+    $("#cards").append(blankcard);
   }  
 }
 /*
@@ -347,9 +357,9 @@ var marker2;
 
 }
 
-$(document).on('click','tr', data, function() {
+$(document).on('click','.btn-primary', map, function() {
   //console.log($(this).attr("brew-data"));
-    //console.log("stuff")
+    console.log("stuff")
    var brewlat = ($(this).attr("brew-lat"));
  //console.log(brewlat)
  //for (i = 0; i < markerArr.length; i++) {
@@ -466,6 +476,121 @@ function encodeNumber(num) {
   encodeString += (String.fromCharCode(num + 63));
   return encodeString;
 }
+
+$(document).on("click", "#name", function() {
+  $("#cards").empty();
+  if ($(this).attr("id") == "name"){
+  console.log("name")
+  if (nameReverse == true){
+    data.reverse(function(a, b) {
+      var textA = a.name
+      var textB = b.name
+      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+  });
+  nameReverse = false;
+  }
+   else if (nameReverse == false){
+   data.sort(function(a, b) {
+      var textA = a.name
+      var textB = b.name
+      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+  });
+  nameReverse = true;
+}
+  
+  populateTable(data);
+  }
+  if ($(this).attr("id") == "rank"){
+    console.log("rank")
+    if (rankReverse == true){
+      data.reverse(function(a, b) {
+        var textA = a.rank
+        var textB = b.rank
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    });
+    rankReverse = false;
+    }
+     else if (rankReverse == false){
+     data.sort(function(a, b) {
+        var textA = a.rank
+        var textB = b.rank
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    });
+    rankReverse = true;
+  }
+    
+    populateTable(data);
+    }
+    if ($(this).attr("id") == "brewery"){
+      console.log("brewery")
+      if (breweryReverse == true){
+        data.reverse(function(a, b) {
+          var textA = a.brewloc
+          var textB = b.brewloc
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+      });
+      breweryReverse = false;
+      }
+       else if (breweryReverse == false){
+       data.sort(function(a, b) {
+          var textA = a.brewloc
+          var textB = b.brewloc
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+      });
+      breweryReverse = true;
+    }
+      
+      populateTable(data);
+      }
+      if ($(this).attr("id") == "style"){
+        console.log("style")
+        if (styleReverse == true){
+          data.reverse(function(a, b) {
+            var textA = a.style
+            var textB = b.style
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+        styleReverse = false;
+        }
+         else if (styleReverse == false){
+         data.sort(function(a, b) {
+            var textA = a.style
+            var textB = b.style
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+        styleReverse = true;
+      }
+        
+        populateTable(data);
+        }
+
+        if ($(this).attr("id") == "distance"){
+          console.log("distance")
+          if (distanceReverse == true){
+            data.reverse(function(a, b) {
+              var textA = a.distance
+              console.log(textA)
+              var textB = b.distance
+              return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+          });
+          distanceReverse = false;
+          }
+           else if (distanceReverse == false){
+           data.sort(function(a, b) {
+              var textA = a.distance
+              var textB = b.distance
+              return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+          });
+          distanceReverse = true;
+        }
+        console.log(data)
+          
+          populateTable(data);
+          }
+  
+  
+//sortTable();    
+});
 
 //=======================================================================================
 

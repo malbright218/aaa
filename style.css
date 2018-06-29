@@ -104,7 +104,7 @@
      display: inline;
      width: 25%;
      float: left;
-     padding: 4px;
+     padding: 10px;
    }
 
    .card-text {
@@ -112,7 +112,42 @@
      word-wrap: 
    }
 
-   .btn-primary {
+   .btn, .btn-primary {
      width: 100%;
+     color: #fff;
    }
    
+   .number-circle {
+    border-radius: 50%;
+    behavior: url(PIE.htc);
+    /* remove if you don't care about IE8 */
+    width: 44px;
+    height: 44px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 16px;
+    padding-bottom: 0px;
+    background: #157EFB;
+    color: #fff;
+    text-align: center;
+    font: 16px Arial, sans-serif;
+  }
+#routebtn {
+  border-radius: 12px;
+       background-color:white;
+       box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+       transition: all 0.3s ease 0s;
+       cursor: pointer;
+       outline: none;
+}
+
+.button:hover {
+ background-color: #2EE59D;
+ box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+ color: #fff;
+ transform: translateY(-7px);
+}
+
+.cardin {
+  display: inline;
+}
